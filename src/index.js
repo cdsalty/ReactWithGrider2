@@ -1,43 +1,59 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-// The following function will get the users location. 
-// Information taken from https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API
-// const App = () => {
-//     window.navigator.geolocation.getCurrentPosition(    // taken mostly from the docs except sending it to the window 
-//         // our SUCCESS CALLBACK, callback #1
-//         (position) => console.log(position), //we want to take the information and use it to show the location
-        
-//         // our ERROR CALLBACK when there is a conflict or error
-//         (err) => console.log(err)       
-//     )   
-//     return <div>Hi There!</div>;
-// };
 
-//  ** Re-writing the above so it's compact/together **
 
-// const App = () => {
-//     window.navigator.geolocation.getCurrentPosition(    // WE TOOK THIS AND PASTED INOT OUR RENDER ()
-//         position =>console.log(position),
-//         err => console.log(err)
-//     );
 
-//     return <div>Latitude: </div>
-// };
+class App extends React.Component{
+    constructor(props){
+        super(props);
 
-//   VERSES USES THE CLASS ROUTE
-class App extends React.Component {
-    render() {
+        this.state = { lat: null, errorMessage: '' }; //Null, because we don't know the value yet.
+    
         window.navigator.geolocation.getCurrentPosition(
-            position =>console.log(position),
+
+            /*
+            Originally, it was setup like:
+            position => console.log(position),      //This would allow us to see the path to set the lat position at which is later set to position.coords.latitude.
             err => console.log(err)
-        );
+            */
+            position => {
+                this.setState({ lat: position.coords.latitude });
+                // IMPORTANT TO NOTE: the callback above WILL NOT BE INVOKED 
+                // UNTIL WE GET BACK UP TO THE CONSTRUCTOR FUNCTION
+            
+            },
+            // err => console.log(err)
+            // the properties in the console log showed us that message was the error.
+            err => {
+                this.setState({errorMessage: err.message});
+            }
+
+        );   
+    
+    }
+
+
+    render() {
+        // Has Latitude     &&      No errorMessage
+        if (this.state.errorMessage && !this.state.lat) {
+            return <div> Error: {this.state.errorMessage} </div>;
+        }
+        // No Latitude      &&      Has errorMessage
+        if (!this.state.errorMessage && this.state.lat) {
+            return <div> Error: {this.state.lat} </div>;
+        }
+        // No Latitude      &&      No errorMessage
+        else {
+            return <div>L O A D I N G !</div>;
+        }
         
-        return <div> Latitude: </div>;
-    };    
+        // return <div>Latitude: {this.state.lat}</div>;
+    }
 };
 
-ReactDOM.render(
-    <App />,
-    document.querySelector('#root')
-);
+
+
+
+ReactDOM.render(<App />,
+    document.querySelector('#root'));
