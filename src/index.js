@@ -5,11 +5,15 @@ import SeasonDisplay from './SeasonDisplay'
 
 
 class App extends React.Component{
+    // this.state = {lat: null};   //THIS WAS THE VERY FIRST SETUP
    state = { lat: null, errorMessage: ''};  // using babel, same as setting up Constructor and Super
     
     componentDidMount(){
         window.navigator.geolocation.getCurrentPosition(
-            position => this.setState({lat: position.coords.latitude }),
+            position => {
+                this.setState({lat: position.coords.latitude })
+            },
+            // or you can write it as it is below...
             err => this.setState({ errorMessage: err.message })
         );
     }
