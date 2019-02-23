@@ -1,6 +1,6 @@
 import './SeasonDisplay.css';
 import React from 'react';
-
+  
 const seasonConfig = {
     summer: {
         text: "Let's go to the beach",

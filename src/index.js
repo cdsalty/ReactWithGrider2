@@ -40,7 +40,7 @@ class App extends React.Component{
   
     render() {
         return (
-            <div className = "border red">
+            <div className = "ifWe wantedborder red">
                 {this.renderContent()}
             </div>
         );
